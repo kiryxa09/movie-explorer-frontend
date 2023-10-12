@@ -1,13 +1,9 @@
-import findIconPath from "../../images/findIcon.svg";
 
 function SearchForm() {
-  
-  
   return(
     <div className="search">
       <form className="search__form">
-          <div className="search__finder">
-          <img className="search__img" src={findIconPath} alt="поиск" />
+        <div className="search__finder">
           <input
             className="search__input"
             required
@@ -26,9 +22,11 @@ function SearchForm() {
             <input 
               className="search__tumb"
               type="checkbox"
-            / >
+              id="tumb"
+              name="tumb"
+            />
             <span className="search__tumb-visible" />
-            Короткометражки
+          Короткометражки
           </label>
         </div>
       </form>

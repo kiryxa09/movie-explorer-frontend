@@ -1,25 +1,26 @@
 .promo {
-  margin-top: -5px;
+  margin-top: -35px;
   background-color: #F3C1F8;
   position: relative;
-  height: 530px;
+  height: 555px;
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
-.promo__image {
-  position: relative;
-  margin-top: 82px;
+.promo::before {
+  content: " ";
+  background: url(../../images/landing_logo.svg);
   width: 320px;
   height: 320px;
+  position: absolute;
 }
 
 .promo__header {
-  position: absolute;
-  margin-top: 184px;
+  padding: 0;
+  margin: 0;
   width: 730px;
   text-align: center;
-  font-family: Inter;
   font-size: 50px;
   font-style: normal;
   font-weight: 400;
@@ -29,34 +30,25 @@
 
 @media screen and (max-width: 1023px) {
   .promo {
-    height: 788px;
-  }
-
-  .promo__header {
-    margin-top: 326px;
-  }
-
-  .promo__image {
-    margin-top: 224px;
+    height: 815px;
   }
 }
 
 @media screen and (max-width: 767px) {
   .promo {
-    height: 575px;
+    height: 600px;
   }
 
   .promo__header {
-    margin-top: 207px;
     font-size: 31px;
     line-height: 39px;
     letter-spacing: -1.24px;
     width: 100%;
   }
 
-  .promo__image {
-    margin-top: 142px;
+  .promo::before {
     width: 248px;
     height: 248px;
+    background-size: 248px 248px;
   }
 }

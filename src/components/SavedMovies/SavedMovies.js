@@ -6,12 +6,14 @@ import MoviesCardList from "../MoviesCardList/MoviesCardList";
 
 function SavedMovies() {
   return(
-    <div className="saved-movies">
+    <>
       <Header />
-      <SearchForm />
-      <MoviesCardList />
+      <main className="savedMovies">
+        <SearchForm />
+        <MoviesCardList />
+      </main>
       <Footer />
-    </div>
+    </>
   );
 }
 

@@ -9,6 +9,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  font-size: 12px;
 }
 
 .movies__button:hover {
@@ -18,7 +19,6 @@
 
 @media screen and (max-width: 1023px) {
   .movies__button {
-    font-size: 12px;
     margin-top: 60px;
   }
 }
