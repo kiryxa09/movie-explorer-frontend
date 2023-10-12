@@ -39,7 +39,7 @@
 }
 
 .profile__label:first-child {
-  border-bottom: #E8E8E8 1px solid;
+  border-bottom: #e8e8e8 1px solid;
 }
 
 .profile__input {
@@ -72,7 +72,7 @@
 }
 
 .profile__text_exit {
-  color: #FF4062;
+  color: #ff4062;
 }
 
 .profile__text_exit:hover {
@@ -92,7 +92,7 @@
 }
 
 .profile__edit-error {
-  color: #FF004C;
+  color: #ff004c;
   text-align: center;
   font-size: 11px;
   font-style: normal;
@@ -108,12 +108,12 @@
 }
 
 .profile__edit-button {
-  color: #FFF;
+  color: #fff;
   border: none;
   width: 410px;
   height: 45px;
   border-radius: 3px;
-  background: #3456F3;
+  background: #3456f3;
   text-align: center;
   font-size: 14px;
   font-style: normal;
@@ -128,8 +128,8 @@
 }
 
 .profile__edit-button_error {
-  background: #F8F8F8;
-  color: #C2C2C2;
+  background: #f8f8f8;
+  color: #c2c2c2;
 }
 
 .profile__edit-button_error:hover {
@@ -164,7 +164,7 @@
     width: 260px;
   }
 
-  .profile__edit-container{
+  .profile__edit-container {
     margin-bottom: 40px;
   }
 }

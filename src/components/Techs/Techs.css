@@ -1,7 +1,7 @@
 .techs {
   display: flex;
   justify-content: center;
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
 }
 
 .techs__container {
@@ -52,7 +52,7 @@
   width: 90px;
   height: 60px;
   border-radius: 10px;
-  background: #E8E8E8;
+  background: #e8e8e8;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -95,7 +95,7 @@
     margin: 83px auto 90px;
   }
 
-  .techs__tech-container{
+  .techs__tech-container {
     width: 84px;
     height: 57px;
   }

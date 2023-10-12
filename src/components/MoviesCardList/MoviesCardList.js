@@ -1,4 +1,4 @@
-import MoviesCard from "../MoviesCard/MoviesCard";  
+import MoviesCard from "../MoviesCard/MoviesCard";
 
 function MoviesCardList() {
   return (
@@ -10,7 +10,6 @@ function MoviesCardList() {
       <MoviesCard />
       <MoviesCard />
     </div>
-    
   );
 }
 

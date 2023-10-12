@@ -10,8 +10,10 @@
 }
 
 .portfolio__header {
-  color: #A0A0A0;
-  font-feature-settings: 'clig' off, 'liga' off;
+  color: #a0a0a0;
+  font-feature-settings:
+    "clig" off,
+    "liga" off;
   font-size: 18px;
   font-style: normal;
   font-weight: 400;
@@ -23,7 +25,7 @@
 .portfolio__link {
   min-height: 90px;
   text-decoration: none;
-  border-bottom: #E8E8E8 1px solid;
+  border-bottom: #e8e8e8 1px solid;
   display: flex;
   justify-content: space-between;
   align-items: center;

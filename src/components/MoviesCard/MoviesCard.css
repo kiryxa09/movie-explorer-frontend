@@ -8,7 +8,7 @@
   width: 362px;
   height: 200px;
   border-radius: 7px;
-  object-fit:cover;
+  object-fit: cover;
 }
 
 .moviesCard__button {
@@ -32,7 +32,7 @@
   width: 72px;
   height: 21px;
   border-radius: 30px;
-  background: #F9F9F9;
+  background: #f9f9f9;
 }
 
 .moviesCard__button_saved {
@@ -40,7 +40,7 @@
   background-image: url(../../images/saved.svg);
   width: 21px;
   height: 21px;
-  background-color: rgba( 0, 0, 0, 0);
+  background-color: rgba(0, 0, 0, 0);
 }
 
 .moviesCard__button_delete {
@@ -48,7 +48,7 @@
   width: 21px;
   height: 21px;
   background-position: center;
-  background-color: rgba( 0, 0, 0, 0);
+  background-color: rgba(0, 0, 0, 0);
 }
 
 .moviesCard__info {
@@ -70,14 +70,14 @@
   width: 52px;
   height: 18px;
   border-radius: 3px;
-  background: #F9F9F9;
+  background: #f9f9f9;
   margin: 5px 18px 0 0;
   flex-shrink: 0;
 }
 
 .moviesCard__duration {
   margin: 0;
-  color: #A0A0A0;
+  color: #a0a0a0;
   text-align: center;
   font-size: 11px;
   font-style: normal;

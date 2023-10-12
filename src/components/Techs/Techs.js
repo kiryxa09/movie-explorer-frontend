@@ -1,12 +1,13 @@
-
-
 function Techs() {
-  return(
+  return (
     <div className="techs" id="techs">
       <div className="techs__container">
         <h2 className="techs__header">Технологии</h2>
         <h3 className="techs__subheader">7 технологий</h3>
-        <p className="techs__text">На курсе веб-разработки мы освоили технологии, которые применили в дипломном проекте.</p>
+        <p className="techs__text">
+          На курсе веб-разработки мы освоили технологии, которые применили в
+          дипломном проекте.
+        </p>
         <div className="techs__list">
           <div className="techs__tech-container">
             <p className="techs__tech-name">HTML</p>

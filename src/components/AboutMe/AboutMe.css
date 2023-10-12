@@ -36,7 +36,9 @@
 }
 
 .aboutMe__description {
-  font-feature-settings: 'clig' off, 'liga' off;
+  font-feature-settings:
+    "clig" off,
+    "liga" off;
   font-size: 18px;
   font-style: normal;
   font-weight: 500;
@@ -48,7 +50,9 @@
 
 .aboutMe__text {
   width: 94%;
-  font-feature-settings: 'clig' off, 'liga' off;
+  font-feature-settings:
+    "clig" off,
+    "liga" off;
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
@@ -107,7 +111,7 @@
 }
 
 @media screen and (max-width: 767px) {
-  .aboutMe__header{
+  .aboutMe__header {
     font-size: 18px;
     letter-spacing: -0.72px;
     margin: 50px 0 28px;

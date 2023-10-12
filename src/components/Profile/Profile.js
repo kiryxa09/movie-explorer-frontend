@@ -9,70 +9,87 @@ function Profile() {
   const [editing, setEditing] = React.useState(false);
   const [error, setError] = React.useState(false);
 
-  const  editProfile = () => {
+  const editProfile = () => {
     setEditing(true);
-  }
+  };
 
-  const  exitProfile = () => {
+  const exitProfile = () => {
     appContext.setRegistered(false);
-  }
+  };
 
   const clickEditButton = () => {
     setError(true);
-  }
+  };
 
-  return(
-      <div className="profile">
-        <Header />
-        <div className="profile__content">
-          <h1 className="profile__header">Привет, Виталий!</h1>
-          <form className="profile__form" name="profile-form">
-            <label for="profile-name" className="profile__label">Имя
-              <input
-                type="text"
-                className="profile__input profile__input_type_name"
-                id="profile-name"
-                placeholder="Имя"
-                minLength={2}
-                maxLength={30}
-                disabled={editing ? (false) : (true)}
-              /></label>
-            <label for="profile-email" className="profile__label">E-mail
-              <input
-                id="profile-email"
-                type="email"
-                className="profile__input profile__input_type_email"
-                placeholder="email"
-                minLength={2}
-                maxLength={30}
-                disabled={editing ? (false) : (true)}
-              /></label>
-          </form>
-        </div>
-        {editing ? 
-        (
-          <div className="profile__edit-container">
-            <span className={error ? ("profile__edit-error profile__edit-error_active") : ("profile__edit-error")}>При обновлении профиля произошла ошибка.</span>
-            <button
-              className={error ? ("profile__edit-button profile__edit-button_error") : ("profile__edit-button")}
-              type="button"
-              disabled={error ? (true) : (false)}
-              onClick={clickEditButton}>Сохранить</button>
-          </div>
-        ) : 
-        (
+  return (
+    <div className="profile">
+      <Header />
+      <div className="profile__content">
+        <h1 className="profile__header">Привет, Виталий!</h1>
+        <form className="profile__form" name="profile-form">
+          <label for="profile-name" className="profile__label">
+            Имя
+            <input
+              type="text"
+              className="profile__input profile__input_type_name"
+              id="profile-name"
+              placeholder="Имя"
+              minLength={2}
+              maxLength={30}
+              disabled={editing ? false : true}
+            />
+          </label>
+          <label for="profile-email" className="profile__label">
+            E-mail
+            <input
+              id="profile-email"
+              type="email"
+              className="profile__input profile__input_type_email"
+              placeholder="email"
+              minLength={2}
+              maxLength={30}
+              disabled={editing ? false : true}
+            />
+          </label>
+        </form>
+      </div>
+      {editing ? (
         <div className="profile__edit-container">
-          <p className="profile__text profile__text_edit" onClick={editProfile}>Редактировать</p>
-          <Link 
-            className="profile__link"
-            to="/"
-            onClick={exitProfile}>
-              <p className="profile__text profile__text_exit">Выйти из аккаунта</p>
+          <span
+            className={
+              error
+                ? "profile__edit-error profile__edit-error_active"
+                : "profile__edit-error"
+            }
+          >
+            При обновлении профиля произошла ошибка.
+          </span>
+          <button
+            className={
+              error
+                ? "profile__edit-button profile__edit-button_error"
+                : "profile__edit-button"
+            }
+            type="button"
+            disabled={error ? true : false}
+            onClick={clickEditButton}
+          >
+            Сохранить
+          </button>
+        </div>
+      ) : (
+        <div className="profile__edit-container">
+          <p className="profile__text profile__text_edit" onClick={editProfile}>
+            Редактировать
+          </p>
+          <Link className="profile__link" to="/" onClick={exitProfile}>
+            <p className="profile__text profile__text_exit">
+              Выйти из аккаунта
+            </p>
           </Link>
         </div>
-        )}
-        
-      </div>
+      )}
+    </div>
   );
 }
 

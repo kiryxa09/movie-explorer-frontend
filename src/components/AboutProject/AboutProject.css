@@ -62,7 +62,7 @@
 }
 
 .aboutProject__timeline-part_color_gray {
-  background-color: #F2F2F2;
+  background-color: #f2f2f2;
   width: 100%;
 }
 
@@ -92,7 +92,7 @@
 }
 
 .aboutProject__description {
-  color: #A0A0A0;
+  color: #a0a0a0;
   text-align: center;
   margin: 0;
 }
@@ -109,7 +109,7 @@
   .aboutProject__container {
     width: 87.5%;
   }
-  
+
   .aboutProject__text {
     width: 86%;
   }
@@ -123,7 +123,7 @@
   .aboutProject__subheader {
     width: 100%;
   }
-  
+
   .aboutProject__subheader:last-child {
     margin-left: 20px;
   }
