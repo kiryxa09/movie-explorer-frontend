@@ -144,7 +144,7 @@
   }
 
   .header__container {
-    padding: 0 30px 0;
+    max-width: 708px;
   }
 
   .header__link-text {
@@ -251,7 +251,7 @@
 
 @media screen and (max-width: 767px) {
   .header__container {
-    padding: 0 14px 0;
+    max-width: 292px;
   }
 
   .header__links-mobile::before {

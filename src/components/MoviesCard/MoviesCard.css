@@ -1,17 +1,17 @@
-.moviesCard {
+.movies-card {
   position: relative;
   width: 362px;
   cursor: pointer;
 }
 
-.moviesCard__image {
+.movies-card__image {
   width: 362px;
   height: 200px;
   border-radius: 7px;
   object-fit: cover;
 }
 
-.moviesCard__button {
+.movies-card__button {
   position: absolute;
   top: 14px;
   right: 14px;
@@ -23,19 +23,19 @@
   border: none;
 }
 
-.moviesCard__button:hover {
+.movies-card__button:hover {
   opacity: 0.8;
   cursor: pointer;
 }
 
-.moviesCard__button_save {
+.movies-card__button_save {
   width: 72px;
   height: 21px;
   border-radius: 30px;
   background: #f9f9f9;
 }
 
-.moviesCard__button_saved {
+.movies-card__button_saved {
   background-position: center;
   background-image: url(../../images/saved.svg);
   width: 21px;
@@ -43,7 +43,7 @@
   background-color: rgba(0, 0, 0, 0);
 }
 
-.moviesCard__button_delete {
+.movies-card__button_delete {
   background-image: url(../../images/deleteButton.svg);
   width: 21px;
   height: 21px;
@@ -51,14 +51,14 @@
   background-color: rgba(0, 0, 0, 0);
 }
 
-.moviesCard__info {
+.movies-card__info {
   display: flex;
   justify-content: space-between;
   align-items: start;
   margin-top: 14px;
 }
 
-.moviesCard__title {
+.movies-card__title {
   margin: 0 0 0 14px;
   font-size: 14px;
   font-style: normal;
@@ -66,7 +66,7 @@
   line-height: normal;
 }
 
-.moviesCard__container-duration {
+.movies-card__container-duration {
   width: 52px;
   height: 18px;
   border-radius: 3px;
@@ -75,7 +75,7 @@
   flex-shrink: 0;
 }
 
-.moviesCard__duration {
+.movies-card__duration {
   margin: 0;
   color: #a0a0a0;
   text-align: center;
@@ -86,44 +86,44 @@
 }
 
 @media screen and (max-width: 1023px) {
-  .moviesCard__image {
+  .movies-card__image {
     width: 340px;
     height: 190px;
   }
 
-  .moviesCard {
+  .movies-card {
     width: 340px;
   }
 
-  .moviesCard__info {
+  .movies-card__info {
     margin-top: 20px;
   }
 
-  .moviesCard__title {
+  .movies-card__title {
     margin-left: 0;
     font-size: 13px;
   }
 
-  .moviesCard__container-duration {
+  .movies-card__container-duration {
     margin: 5px 0 0;
   }
 }
 
 @media screen and (max-width: 767px) {
-  .moviesCard__image {
+  .movies-card__image {
     width: 300px;
     height: 170px;
   }
 
-  .moviesCard {
+  .movies-card {
     width: 300px;
   }
 
-  .moviesCard__title {
+  .movies-card__title {
     font-size: 12px;
   }
 
-  .moviesCard__info {
+  .movies-card__info {
     margin-top: 5px;
   }
 }

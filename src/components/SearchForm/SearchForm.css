@@ -122,11 +122,18 @@
 @media screen and (max-width: 1023px) {
   .search__form {
     margin-bottom: 110px;
-    padding-top: 10px;
   }
 
   .search__shorties {
-    padding-right: 20px;
+    padding-right: 15px;
+  }
+
+  .search__button {
+    margin-right: 20px;
+  }
+
+  .search .search__tumb-visible {
+    margin-right: 10px;
   }
 }
 
@@ -158,7 +165,7 @@
   .search__shorties {
     padding-right: 0px;
     position: relative;
-    top: 120px;
+    top: 110px;
     left: 0%;
     min-width: 100%;
     border-left: none;
@@ -170,7 +177,7 @@
   .search__finder {
     align-items: center;
     width: 90%;
-    margin-top: 25px;
+    margin-top: 15px;
   }
 
   .search__checkbox-label {

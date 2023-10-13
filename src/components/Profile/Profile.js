@@ -67,8 +67,8 @@ function Profile() {
           <button
             className={
               error
-                ? "profile__edit-button profile__edit-button_error"
-                : "profile__edit-button"
+                ? "profile__save-button profile__save-button_error"
+                : "profile__save-button"
             }
             type="button"
             disabled={error ? true : false}
@@ -79,9 +79,13 @@ function Profile() {
         </div>
       ) : (
         <div className="profile__edit-container">
-          <p className="profile__text profile__text_edit" onClick={editProfile}>
+          <button
+            type="button"
+            className="profile__edit-button"
+            onClick={editProfile}
+          >
             Редактировать
-          </p>
+          </button>
           <Link className="profile__link" to="/" onClick={exitProfile}>
             <p className="profile__text profile__text_exit">
               Выйти из аккаунта

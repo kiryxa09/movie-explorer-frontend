@@ -1,13 +1,13 @@
-.aboutProject {
+.about-project {
   display: flex;
   justify-content: center;
 }
 
-.aboutProject__container {
+.about-project__container {
   width: 1140px;
 }
 
-.aboutProject__header {
+.about-project__header {
   font-size: 22px;
   font-style: normal;
   font-weight: 400;
@@ -18,12 +18,12 @@
   border-bottom: solid black 1px;
 }
 
-.aboutProject__two-columns {
+.about-project__two-columns {
   display: flex;
   justify-content: space-between;
 }
 
-.aboutProject__subheader {
+.about-project__subheader {
   font-size: 20px;
   font-style: normal;
   font-weight: 400;
@@ -34,7 +34,7 @@
   width: 86%;
 }
 
-.aboutProject__text {
+.about-project__text {
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
@@ -44,44 +44,44 @@
   max-width: 550px;
 }
 
-.aboutProject__timeline {
+.about-project__timeline {
   height: 36px;
   display: flex;
   margin-top: 110px;
 }
 
-.aboutProject__timeline-part {
+.about-project__timeline-part {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.aboutProject__timeline-part_color_black {
+.about-project__timeline-part_color_black {
   background-color: black;
   width: 288px;
 }
 
-.aboutProject__timeline-part_color_gray {
+.about-project__timeline-part_color_gray {
   background-color: #f2f2f2;
   width: 100%;
 }
 
-.aboutProject__timeline-text {
+.about-project__timeline-text {
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
 }
 
-.aboutProject__timeline-text_color_white {
+.about-project__timeline-text_color_white {
   color: white;
 }
 
-.aboutProject__timeline-text_color_black {
+.about-project__timeline-text_color_black {
   color: black;
 }
 
-.aboutProject__timeline-description {
+.about-project__timeline-description {
   display: flex;
   justify-content: space-between;
   margin: 15px 0 110px;
@@ -91,44 +91,44 @@
   line-height: 17px;
 }
 
-.aboutProject__description {
+.about-project__description {
   color: #a0a0a0;
   text-align: center;
   margin: 0;
 }
 
-.aboutProject__description_back {
+.about-project__description_back {
   width: 288px;
 }
 
-.aboutProject__description_front {
+.about-project__description_front {
   width: 100%;
 }
 
 @media screen and (max-width: 1279px) {
-  .aboutProject__container {
+  .about-project__container {
     width: 87.5%;
   }
 
-  .aboutProject__text {
+  .about-project__text {
     width: 86%;
   }
 }
 
 @media screen and (max-width: 1023px) {
-  .aboutProject__header {
+  .about-project__header {
     margin-top: 90px;
   }
 
-  .aboutProject__subheader {
+  .about-project__subheader {
     width: 100%;
   }
 
-  .aboutProject__subheader:last-child {
+  .about-project__subheader:last-child {
     margin-left: 20px;
   }
 
-  .aboutProject__text {
+  .about-project__text {
     width: 100%;
     font-size: 12px;
     font-style: normal;
@@ -136,74 +136,74 @@
     line-height: 18px;
   }
 
-  .aboutProject__column:last-child {
+  .about-project__column:last-child {
     margin-left: 35px;
   }
 
-  .aboutProject__timeline {
+  .about-project__timeline {
     margin-top: 93px;
   }
 
-  .aboutProject__timeline-part_color_black {
+  .about-project__timeline-part_color_black {
     width: 180px;
   }
 
-  .aboutProject__timeline-description {
+  .about-project__timeline-description {
     margin-bottom: 90px;
   }
 
-  .aboutProject__description_back {
+  .about-project__description_back {
     width: 180px;
   }
 }
 
 @media screen and (max-width: 767px) {
-  .aboutProject__header {
+  .about-project__header {
     font-size: 18px;
     letter-spacing: -0.72px;
     margin: 70px 0 5px;
     padding-bottom: 30px;
   }
 
-  .aboutProject__two-columns {
+  .about-project__two-columns {
     flex-direction: column;
     margin-top: 4px;
   }
 
-  .aboutProject__subheader {
+  .about-project__subheader {
     font-size: 18px;
     letter-spacing: -0.72px;
     margin-top: 56px;
   }
 
-  .aboutProject__column:last-child {
+  .about-project__column:last-child {
     margin-left: 0px;
   }
 
-  .aboutProject__text {
+  .about-project__text {
     font-size: 11px;
     line-height: 16px;
     margin-top: 16px;
   }
 
-  .aboutProject__timeline {
+  .about-project__timeline {
     margin-top: 60px;
   }
 
-  .aboutProject__timeline-text {
+  .about-project__timeline-text {
     font-size: 11px;
   }
 
-  .aboutProject__timeline-part_color_black {
+  .about-project__timeline-part_color_black {
     width: 155px;
   }
 
-  .aboutProject__timeline-description {
+  .about-project__timeline-description {
     font-size: 11px;
     margin-top: 10px;
   }
 
-  .aboutProject__description_back {
+  .about-project__description_back {
     width: 150px;
   }
 }

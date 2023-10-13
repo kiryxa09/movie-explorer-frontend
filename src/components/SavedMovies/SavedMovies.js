@@ -7,7 +7,7 @@ function SavedMovies() {
   return (
     <>
       <Header />
-      <main className="savedMovies">
+      <main className="saved-movies">
         <SearchForm />
         <MoviesCardList />
       </main>

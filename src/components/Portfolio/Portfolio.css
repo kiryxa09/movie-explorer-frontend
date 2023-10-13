@@ -57,6 +57,7 @@
   line-height: 60px;
   letter-spacing: -1.2px;
   margin: 0;
+  color: black;
 }
 
 @media screen and (max-width: 1023px) {
@@ -89,7 +90,7 @@
   }
 
   .portfolio__link {
-    height: 68px;
+    min-height: 68px;
   }
 
   .portfolio__link-text {

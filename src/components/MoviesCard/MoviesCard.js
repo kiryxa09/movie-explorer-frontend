@@ -10,13 +10,13 @@ function MoviesCard() {
   };
 
   return (
-    <article className="moviesCard">
+    <article className="movies-card">
       {appContext.moviesRoute ? (
         !saved ? (
           <button
             onClick={handleCardSave}
             type="button"
-            className="moviesCard__button moviesCard__button_save"
+            className="movies-card__button movies-card__button_save"
           >
             Сохранить
           </button>
@@ -24,20 +24,20 @@ function MoviesCard() {
           <button
             onClick={handleCardSave}
             type="button"
-            className="moviesCard__button moviesCard__button_saved"
+            className="movies-card__button movies-card__button_saved"
           />
         )
       ) : (
         <button
           type="button"
-          className="moviesCard__button moviesCard__button_delete"
+          className="movies-card__button movies-card__button_delete"
         ></button>
       )}
-      <img className="moviesCard__image" src={movieCardPath} alt="фильм" />
-      <div className="moviesCard__info">
-        <h2 className="moviesCard__title">33 слова о дизайне</h2>
-        <div className="moviesCard__container-duration">
-          <p className="moviesCard__duration">1ч 17м</p>
+      <img className="movies-card__image" src={movieCardPath} alt="фильм" />
+      <div className="movies-card__info">
+        <h2 className="movies-card__title">33 слова о дизайне</h2>
+        <div className="movies-card__container-duration">
+          <p className="movies-card__duration">1ч 17м</p>
         </div>
       </div>
     </article>
