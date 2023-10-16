@@ -19,11 +19,11 @@ function App() {
   const [signupRoute, setSignupRoute] = React.useState(false);
   const [mainRoute, setMainRoute] = React.useState(false);
   const [profileRoute, setProfileRoute] = React.useState(false);
-  const [movies, setMovies] = React.useState([]);
+  const [movies, setMovies] = React.useState(JSON.parse(localStorage.getItem('movies')) || []);
   const [addedMovies, setAddedMovies] = React.useState([]);
   const [checked, setChecked] = React.useState(false);
   const [queryText, setQueryText] = React.useState("");
-  const [addedMoviesCounter, setAddedMoviesCounter] = React.useState(0);
+  const [addedMoviesCounter, setAddedMoviesCounter] = React.useState(JSON.parse(localStorage.getItem('addedMovies')) || 0);
   const [searchParam] = React.useState(["nameRU", "nameEN"]);
   const [savedMovies, setSavedMovies] = React.useState([]);
   const [isLoading, setISLoading] = React.useState(false);
@@ -46,14 +46,9 @@ function App() {
   }, []);
 
   React.useEffect(() => {
-    console.log((JSON.parse(localStorage.getItem('movies'))));
-    const arrMovie = JSON.parse(localStorage.getItem('movies'));
-    if(arrMovie) {
-      setMovies(arrMovie);
-      console.log("boo");
-      console.log(movies);
+    if (addedMoviesCounter) {
+      setAddedMovies(movies.slice(0, addedMoviesCounter));
     }
-    setAddedMoviesCounter(JSON.parse(localStorage.getItem('addedMovies')));
     setChecked(JSON.parse(localStorage.getItem('checkbox')));
     setQueryText(localStorage.getItem('query'));
     console.log(localStorage);
@@ -127,13 +122,10 @@ function App() {
         localStorage.setItem('movies', JSON.stringify(movies));
         if (width>1279) {
           setAddedMovies(movies.slice(0, 12));
-          
         } else if (width>767) {
           setAddedMovies(movies.slice(0, 8));
-          localStorage.setItem('addedMovies', parseInt(addedMovies.length));
         } else if (width>1) {
           setAddedMovies(movies.slice(0, 5));
-          localStorage.setItem('addedMovies', parseInt(addedMovies.length));
         }
       })
       .catch((err) => {
