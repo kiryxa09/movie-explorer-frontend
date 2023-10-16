@@ -7,12 +7,17 @@ function MoviesCardList() {
 
   return (
     <div className="movies-card-list">
-      {appContext.addedMovies && appContext.addedMovies.map((movie) => (
+      {appContext.moviesRoute ? (appContext.addedMovies.map((movie) => (
           <MoviesCard
             movie={movie}
             key={movie.id}
           />
-        ))}
+        ))) :
+        (appContext.savedMoviesRoute && appContext.savedMovies.map((movie) => (
+          <MoviesCard
+            movie={movie}
+            key={movie.id}
+          />)))}
     </div>
   );
 }

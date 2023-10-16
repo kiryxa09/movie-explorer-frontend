@@ -11,7 +11,6 @@ function Movies() {
     if (appContext.addedMovies.length === appContext.movies.length) {
       return true;    
     }
-    console.log(appContext.addedMovies.length, appContext.movies.length);
     return false;
   }
   return (

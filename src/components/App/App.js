@@ -9,6 +9,7 @@ import React from "react";
 import Auth from "../Auth/Auth";
 import * as mainApi from "../../utils/MainApi";
 import * as moviesApi from "../../utils/MoviesApi";
+import Preloader from "../Preloader/Preloader"
 
 function App() {
   const [registeredState, setRegistered] = React.useState(false);
@@ -24,6 +25,8 @@ function App() {
   const [queryText, setQueryText] = React.useState("");
   const [addedMoviesCounter, setAddedMoviesCounter] = React.useState(0);
   const [searchParam] = React.useState(["nameRU", "nameEN"]);
+  const [savedMovies, setSavedMovies] = React.useState([]);
+  const [isLoading, setISLoading] = React.useState(false);
 
   const location = useLocation();
   
@@ -37,6 +40,24 @@ function App() {
         console.log(err);
     })
   };
+
+  React.useEffect(() => {
+    handleTokenCheck();
+  }, []);
+
+  React.useEffect(() => {
+    console.log((JSON.parse(localStorage.getItem('movies'))));
+    const arrMovie = JSON.parse(localStorage.getItem('movies'));
+    if(arrMovie) {
+      setMovies(arrMovie);
+      console.log("boo");
+      console.log(movies);
+    }
+    setAddedMoviesCounter(JSON.parse(localStorage.getItem('addedMovies')));
+    setChecked(JSON.parse(localStorage.getItem('checkbox')));
+    setQueryText(localStorage.getItem('query'));
+    console.log(localStorage);
+  }, [])
 
   function useWidth() {
     const [width, setWidth] = React.useState(0);
@@ -54,34 +75,18 @@ function App() {
   let width = useWidth();
 
   React.useEffect(() => {
-    handleTokenCheck();
-    setMovies(JSON.parse(localStorage.getItem('movies')));
-    setAddedMoviesCounter(JSON.parse(localStorage.getItem('addedMovies')));
-    setChecked(JSON.parse(localStorage.getItem('checkbox')));
-    setQueryText(localStorage.getItem('query'));
-    console.log(localStorage);
-  }, []);
-
-  React.useEffect(() => {
-      localStorage.setItem('movies', JSON.stringify(movies));
-      //
-  }, [movies, addedMoviesCounter]);
-
-  React.useEffect(() => {
-    if (addedMovies.length > 0) {
-      localStorage.setItem('addedMovies', parseInt(addedMovies.length));
+    if (registeredState) {
+      mainApi
+      .getMovies(res => {
+        setSavedMovies(res.myMovies)
+      })
+      .catch(err => {
+        console.log(err);
+      }) 
     }
-    console.log(addedMoviesCounter);
-  }, [addedMoviesCounter]);
+  }, [registeredState]);
 
-  React.useEffect(() => {
-    checked && localStorage.setItem('checkbox' , JSON.stringify(checked));
-    console.log(checked);
-  }, [checked]);
-
-  React.useEffect(() => {
-    queryText && localStorage.setItem('query', queryText);
-  }, [queryText]);
+  
 
   const setLocationfalse = () => {
     setMainRoute(false);
@@ -114,29 +119,31 @@ function App() {
     }
   }, [location.pathname]);
 
-  React.useEffect(() => {
-    if(addedMoviesCounter) {
-      console.log(movies);
-      setAddedMovies(movies.splice(0, addedMoviesCounter));
-      console.log(addedMoviesCounter)
-    }
-  }, [addedMoviesCounter])
-
   function downloadMovies() {
+    setISLoading(true);
     moviesApi.getMovies()
       .then(res => {
         setMovies(search(res));
+        localStorage.setItem('movies', JSON.stringify(movies));
         if (width>1279) {
           setAddedMovies(movies.slice(0, 12));
+          
         } else if (width>767) {
-          setAddedMovies(movies.slice(0, 8))
+          setAddedMovies(movies.slice(0, 8));
+          localStorage.setItem('addedMovies', parseInt(addedMovies.length));
         } else if (width>1) {
-          setAddedMovies(movies.slice(0, 5))
+          setAddedMovies(movies.slice(0, 5));
+          localStorage.setItem('addedMovies', parseInt(addedMovies.length));
         }
       })
       .catch((err) => {
         console.log(err);
-      });
+      })
+      .finally(() => {
+        setISLoading(false);
+        localStorage.setItem('addedMovies', parseInt(addedMovies.length));
+        console.log(addedMovies);
+      })
   }
 
   function addMoreMovies() {
@@ -145,18 +152,21 @@ function App() {
     let thirdMovie = firstMovie + 2;
     if (width > 1279 && movies[thirdMovie]) {
       setAddedMovies([ ...addedMovies, movies[firstMovie],  movies[secondMovie], movies[thirdMovie] ]);
+      localStorage.setItem('addedMovies', parseInt(addedMovies.length));
     } else if (movies[secondMovie]) {
       setAddedMovies([ ...addedMovies, movies[firstMovie], movies[secondMovie] ]);
+      localStorage.setItem('addedMovies', parseInt(addedMovies.length));
     } else if (movies[firstMovie]) {
       setAddedMovies([ ...addedMovies, movies[firstMovie] ]);
+      localStorage.setItem('addedMovies', parseInt(addedMovies.length));
     } else {
       console.log("bom bom", movies[thirdMovie]);
     }
+    console.log(addedMovies);
   }
 
   function search(items) {
     return items.filter((item) => {
-    console.log(item);
     if(checked) {
       if(item.duration < 41) {
         return searchParam.some((newItem) => {
@@ -200,10 +210,15 @@ function App() {
         queryText,
         setQueryText,
         addMoreMovies,
+        savedMovies,
+        setISLoading,
       }}
     >
       <div className="page">
-        <Routes>
+        {isLoading ? (
+          <Preloader />
+        ) : (
+          <Routes>
           <Route path="/" element={<Main />} />
           <Route path="/movies" element={<Movies />} />
           <Route path="/saved-movies" element={<SavedMovies />} />
@@ -236,6 +251,8 @@ function App() {
           />
           <Route path="/*" element={<NotFound />} />
         </Routes>
+        )}
+        
       </div>
     </AppContext.Provider>
   );

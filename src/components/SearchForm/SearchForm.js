@@ -8,6 +8,16 @@ function SearchForm() {
     appContext.downloadMovies();
   }
 
+  function handleChangeText(e) {
+    appContext.setQueryText(e.target.value);
+    localStorage.setItem('query', e.target.value);
+  }
+
+  function handleChangebox(e) {
+    appContext.setChecked(e.target.checked);
+    localStorage.setItem('checkbox' , JSON.stringify(e.target.checked));
+  }
+
   return (
     <div className="search">
       <form className="search__form">
@@ -20,7 +30,7 @@ function SearchForm() {
             type="text"
             placeholder="Фильм"
             value={appContext.queryText}
-            onChange={e => appContext.setQueryText(e.target.value)}
+            onChange={handleChangeText}
           />
           <button className="search__button" type="button" onClick={setMovies}>
             Найти
@@ -34,7 +44,7 @@ function SearchForm() {
               id="tumb"
               name="tumb"
               checked={appContext.checked}
-              onChange={e => appContext.setChecked(e.target.checked)}
+              onChange={handleChangebox}
             />
             <span className="search__tumb-visible" />
             Короткометражки
