@@ -1,7 +1,54 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import React from "react";
 import Logo from "../Logo/Logo";
+import { useForm } from "../../hooks/useForm";
+import { AppContext } from "../../context/AppContext";
+import * as mainApi from "../../utils/MainApi";
 
 function Auth(props) {
+  const { values, handleChange, setValues } = useForm({});
+  const navigate = useNavigate();
+  const appContext = React.useContext(AppContext);
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+
+    if (!values.email || !values.password) {
+      return;
+    }
+
+    mainApi
+      .authorize({
+        password: values.password,
+        email: values.email,
+      })
+      .then((data) => {
+        if (data) {
+          console.log(data);
+          setValues("");
+          appContext.setRegistered(true);
+          navigate("/", { replace: true });
+        }
+      })
+      .catch((err) => console.log(err));      
+  }
+
+  const handleRegister = (evt) => {
+    evt.preventDefault();
+    mainApi
+      .register({
+        password: values.password,
+        email: values.email,
+        name: values.name
+      })
+      .then((res) => {
+        console.log(res);
+        if (res) {
+          setValues("");
+          navigate("/signin", { replace: true });        }
+      })
+  }
+
   return (
     <main className="auth">
       <div className="auth__content">
@@ -20,6 +67,8 @@ function Auth(props) {
                 placeholder="Имя"
                 minLength={2}
                 maxLength={30}
+                value={values.name ?? ""}
+                onChange={handleChange}
               />
             </>
           )}
@@ -31,6 +80,8 @@ function Auth(props) {
             name="email"
             type="email"
             placeholder="Email"
+            value={values.email ?? ""}
+            onChange={handleChange}
           />
           <p className="auth__label">Пароль</p>
           <input
@@ -42,11 +93,13 @@ function Auth(props) {
             placeholder="Пароль"
             minLength={2}
             maxLength={30}
+            value={values.password ?? ""}
+            onChange={handleChange}
           />
         </form>
       </div>
       <div className="auth__button-container">
-        <button type="submit" className="auth__button">
+        <button type="submit" className="auth__button" onClick={appContext.signinRoute ? (handleLogin) : (handleRegister)}>
           {props.buttonText}
         </button>
         <p className="auth__signup">

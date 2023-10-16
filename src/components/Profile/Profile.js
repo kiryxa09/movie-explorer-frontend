@@ -2,10 +2,14 @@ import Header from "../Header/Header";
 import { Link } from "react-router-dom";
 import React from "react";
 import { AppContext } from "../../context/AppContext";
+import * as mainApi from "../../utils/MainApi";
+import { useForm } from "../../hooks/useForm";
+
+
 
 function Profile() {
   const appContext = React.useContext(AppContext);
-
+  const { values, handleChange, setValues } = useForm({});
   const [editing, setEditing] = React.useState(false);
   const [error, setError] = React.useState(false);
 
@@ -14,11 +18,23 @@ function Profile() {
   };
 
   const exitProfile = () => {
-    appContext.setRegistered(false);
+    mainApi
+      .signOut()
+      .then((res) => {
+        if (res) {
+          appContext.setRegistered(false);
+        }
+      })
   };
 
   const clickEditButton = () => {
-    setError(true);
+    mainApi.patchProfile(values)
+    .then(res => {
+      console.log(res)
+    })
+    .catch(err => {
+      console.log(err);
+    });
   };
 
   return (
@@ -27,28 +43,34 @@ function Profile() {
       <div className="profile__content">
         <h1 className="profile__header">Привет, Виталий!</h1>
         <form className="profile__form" name="profile-form">
-          <label for="profile-name" className="profile__label">
+          <label htmlFor="profile-name" className="profile__label">
             Имя
             <input
               type="text"
+              name="name"
               className="profile__input profile__input_type_name"
               id="profile-name"
               placeholder="Имя"
               minLength={2}
               maxLength={30}
               disabled={editing ? false : true}
+              value={values.name ?? ""}
+              onChange={handleChange}
             />
           </label>
-          <label for="profile-email" className="profile__label">
+          <label htmlFor="profile-email" className="profile__label">
             E-mail
             <input
               id="profile-email"
               type="email"
+              name="email"
               className="profile__input profile__input_type_email"
               placeholder="email"
               minLength={2}
               maxLength={30}
               disabled={editing ? false : true}
+              value={values.email ?? ""}
+              onChange={handleChange}
             />
           </label>
         </form>

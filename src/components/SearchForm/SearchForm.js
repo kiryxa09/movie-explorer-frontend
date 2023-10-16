@@ -1,4 +1,13 @@
+import { AppContext } from "../../context/AppContext";
+import React from "react";
+
 function SearchForm() {
+  const appContext = React.useContext(AppContext);
+  const setMovies = (e) => {
+    e.preventDefault();
+    appContext.downloadMovies();
+  }
+
   return (
     <div className="search">
       <form className="search__form">
@@ -10,8 +19,10 @@ function SearchForm() {
             name="search"
             type="text"
             placeholder="Фильм"
+            value={appContext.queryText}
+            onChange={e => appContext.setQueryText(e.target.value)}
           />
-          <button className="search__button" type="button">
+          <button className="search__button" type="button" onClick={setMovies}>
             Найти
           </button>
         </div>
@@ -22,6 +33,8 @@ function SearchForm() {
               type="checkbox"
               id="tumb"
               name="tumb"
+              checked={appContext.checked}
+              onChange={e => appContext.setChecked(e.target.checked)}
             />
             <span className="search__tumb-visible" />
             Короткометражки

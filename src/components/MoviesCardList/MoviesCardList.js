@@ -1,14 +1,18 @@
+import { AppContext } from "../../context/AppContext";
 import MoviesCard from "../MoviesCard/MoviesCard";
+import React from "react";
 
 function MoviesCardList() {
+  const appContext = React.useContext(AppContext);
+
   return (
     <div className="movies-card-list">
-      <MoviesCard />
-      <MoviesCard />
-      <MoviesCard />
-      <MoviesCard />
-      <MoviesCard />
-      <MoviesCard />
+      {appContext.addedMovies && appContext.addedMovies.map((movie) => (
+          <MoviesCard
+            movie={movie}
+            key={movie.id}
+          />
+        ))}
     </div>
   );
 }
