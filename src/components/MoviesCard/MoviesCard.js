@@ -5,9 +5,12 @@ import * as mainApi from "../../utils/MainApi";
 function MoviesCard(props) {
   const appContext = React.useContext(AppContext);
   const [saved, setSaved] = React.useState(false);
+  const movieImage = `https://api.nomoreparties.co/${props.movie.image.url}`;
   const handleCardSave = () => {
     mainApi
-      .postMovie(props.movie)
+      .postMovie({ country: props.movie.country, director: props.movie.director, duration: props.movie.duration,
+        year: props.movie.year, description: props.movie.description, image: movieImage, trailerLink: props.movie.trailerLink,
+        nameRU: props.movie.nameRU, nameEN: props.movie.nameEN, thumbnail: props.movie.thumbnail, id: props.movie.id })
       .then(res => {
         setSaved(true);
         console.log(res);
@@ -69,7 +72,7 @@ function MoviesCard(props) {
           className="movies-card__button movies-card__button_delete"
         ></button>
       )}
-      <img className="movies-card__image" src={`https://api.nomoreparties.co/${props.movie.image.url}`} alt={props.movie.nameRU} />
+      <img className="movies-card__image" src={movieImage} alt={props.movie.nameRU} />
       <div className="movies-card__info">
         <h2 className="movies-card__title">{props.movie.nameRU}</h2>
         <div className="movies-card__container-duration">

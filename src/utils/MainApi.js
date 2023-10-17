@@ -80,7 +80,7 @@ export const getMovies = () => {
 
 export const postMovie = ({country, director, duration,
   year, description, image, trailerLink,
-  nameRU, nameEN, thumbnail, movieId}) => {
+  nameRU, nameEN, thumbnail, id}) => {
   return fetch(`${BASE_URL}/movies`, {
     method: "POST",
     credentials: 'include',
@@ -89,7 +89,7 @@ export const postMovie = ({country, director, duration,
     },
     body: JSON.stringify({ country, director, duration,
       year, description, image, trailerLink,
-      nameRU, nameEN, thumbnail, movieId }),
+      nameRU, nameEN, thumbnail, id }),
   })
     .then((res) => checkResponse(res))
 };
