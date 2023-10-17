@@ -1,15 +1,27 @@
 import { AppContext } from "../../context/AppContext";
 import React from "react";
 
-function SearchForm() {
+function SearchForm(props) {
   const appContext = React.useContext(AppContext);
+  const [error, setError] = React.useState(false);
+
   const setMovies = (e) => {
+    if (appContext.queryText) {
+      e.preventDefault();
+      props.onSearch();
+    } else {
+      setError(true);
+    }
+  }
+
+  const setSavedMovies = (e) => {
     e.preventDefault();
-    appContext.downloadMovies();
+    props.onSearch();
   }
 
   function handleChangeText(e) {
     appContext.setQueryText(e.target.value);
+    setError(false);
     localStorage.setItem('query', e.target.value);
   }
 
@@ -32,7 +44,7 @@ function SearchForm() {
             value={appContext.queryText}
             onChange={handleChangeText}
           />
-          <button className="search__button" type="button" onClick={setMovies}>
+          <button className="search__button" type="button" onClick={appContext.moviesRoute ? (setMovies) : (setSavedMovies)}>
             Найти
           </button>
         </div>
@@ -51,6 +63,7 @@ function SearchForm() {
           </label>
         </div>
       </form>
+      {error && <span className="search__error">Нужно ввести ключевое слово</span>}
     </div>
   );
 }

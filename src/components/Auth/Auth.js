@@ -1,52 +1,66 @@
 import { Link, useNavigate } from "react-router-dom";
 import React from "react";
 import Logo from "../Logo/Logo";
-import { useForm } from "../../hooks/useForm";
+import { useFormWithValidation } from "../../hooks/useForm";
 import { AppContext } from "../../context/AppContext";
 import * as mainApi from "../../utils/MainApi";
+import { CurrentUserContext } from "../../context/CurrentUserContext";
 
 function Auth(props) {
-  const { values, handleChange, setValues } = useForm({});
+  const validation = useFormWithValidation();
   const navigate = useNavigate();
   const appContext = React.useContext(AppContext);
+  const currentUser = React.useContext(CurrentUserContext);
 
   const handleLogin = (e) => {
     e.preventDefault();
 
-    if (!values.email || !values.password) {
+    if (!validation.values.email || !validation.values.password) {
       return;
     }
 
+    appContext.setISLoading(true);
+
     mainApi
       .authorize({
-        password: values.password,
-        email: values.email,
+        password: validation.values.password,
+        email: validation.values.email,
       })
       .then((data) => {
         if (data) {
           console.log(data);
-          setValues("");
+          validation.resetForm("")
           appContext.setRegistered(true);
+          currentUser.name = validation.values.name;
+          currentUser.email = validation.values.email;
           navigate("/", { replace: true });
         }
       })
-      .catch((err) => console.log(err));      
+      .catch((err) => console.log(err))
+      .finally(() => {
+        appContext.setISLoading(false);
+      })      
   }
 
   const handleRegister = (evt) => {
     evt.preventDefault();
+    appContext.setISLoading(true);
     mainApi
       .register({
-        password: values.password,
-        email: values.email,
-        name: values.name
+        password: validation.values.password,
+        email: validation.values.email,
+        name: validation.values.name
       })
       .then((res) => {
         console.log(res);
         if (res) {
-          setValues("");
+          validation.setValues("");
           navigate("/signin", { replace: true });        }
       })
+      .catch((err) => console.log(err))
+      .finally(() => {
+        appContext.setISLoading(false);
+      })    
   }
 
   return (
@@ -54,7 +68,7 @@ function Auth(props) {
       <div className="auth__content">
         <Logo />
         <h1 className="auth__title">{props.title}</h1>
-        <form className="auth__form" name="auth-form">
+        <form className="auth__form" name="auth-form" noValidate>
           {props.signup && (
             <>
               <p className="auth__label">Имя</p>
@@ -67,8 +81,10 @@ function Auth(props) {
                 placeholder="Имя"
                 minLength={2}
                 maxLength={30}
-                value={values.name ?? ""}
-                onChange={handleChange}
+                value={validation.values.name ?? ""}
+                onChange={validation.handleChange}
+                onError={validation.errors}
+                pattern="^[-а-яА-ЯёЁa-zA-Z\s]+$"
               />
             </>
           )}
@@ -80,8 +96,10 @@ function Auth(props) {
             name="email"
             type="email"
             placeholder="Email"
-            value={values.email ?? ""}
-            onChange={handleChange}
+            value={validation.values.email ?? ""}
+            onChange={validation.handleChange}
+            onError={validation.errors}
+            pattern="[^@\s]+@[^@\s]+\.[^@\s]+"
           />
           <p className="auth__label">Пароль</p>
           <input
@@ -93,13 +111,15 @@ function Auth(props) {
             placeholder="Пароль"
             minLength={2}
             maxLength={30}
-            value={values.password ?? ""}
-            onChange={handleChange}
+            value={validation.values.password ?? ""}
+            onChange={validation.handleChange}
+            onError={validation.errors}
           />
         </form>
+        <span className={validation.isValid ? ("auth__error") : ("auth__error auth__error_active")}>{validation.errors.name || validation.errors.email || validation.errors.password}</span>
       </div>
       <div className="auth__button-container">
-        <button type="submit" className="auth__button" onClick={appContext.signinRoute ? (handleLogin) : (handleRegister)}>
+        <button type="submit" disabled={validation.isValid ? (false) : (true)} className={validation.isValid ? ("auth__button") : ("auth__button auth__button_error")}  onClick={appContext.signinRoute ? (handleLogin) : (handleRegister)}>
           {props.buttonText}
         </button>
         <p className="auth__signup">

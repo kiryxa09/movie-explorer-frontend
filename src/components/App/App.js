@@ -1,4 +1,4 @@
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import Main from "../Main/Main";
 import Movies from "../Movies/Movies";
 import SavedMovies from "../SavedMovies/SavedMovies";
@@ -9,7 +9,9 @@ import React from "react";
 import Auth from "../Auth/Auth";
 import * as mainApi from "../../utils/MainApi";
 import * as moviesApi from "../../utils/MoviesApi";
-import Preloader from "../Preloader/Preloader"
+import Preloader from "../Preloader/Preloader";
+import { CurrentUserContext } from "../../context/CurrentUserContext";
+import ProtectedRouteElement from "../ProtectedRoute/ProtectedRoute";
 
 function App() {
   const [registeredState, setRegistered] = React.useState(false);
@@ -27,18 +29,30 @@ function App() {
   const [searchParam] = React.useState(["nameRU", "nameEN"]);
   const [savedMovies, setSavedMovies] = React.useState([]);
   const [isLoading, setISLoading] = React.useState(false);
+  const [currentUser, setCurrentUser] = React.useState({});
 
   const location = useLocation();
+
+  const navigate = useNavigate();
   
   const handleTokenCheck = () => {
     mainApi.checkToken().then((res) => {
-      if (res) { 
+      if (res) {
+        setCurrentUser(res);
         setRegistered(true);
-      }
-    })
-    .catch(err => {
-        console.log(err);
-    })
+        navigate("/movies", { replace: true });
+        mainApi
+          .getMovies()
+          .then(res => {
+            console.log(res);
+            setSavedMovies(res.myMovies)
+        })
+        .catch(err => {
+          console.log(err);
+        })
+    }
+    console.log(savedMovies);
+    });
   };
 
   React.useEffect(() => {
@@ -68,20 +82,6 @@ function App() {
   }
 
   let width = useWidth();
-
-  React.useEffect(() => {
-    if (registeredState) {
-      mainApi
-      .getMovies(res => {
-        setSavedMovies(res.myMovies)
-      })
-      .catch(err => {
-        console.log(err);
-      }) 
-    }
-  }, [registeredState]);
-
-  
 
   const setLocationfalse = () => {
     setMainRoute(false);
@@ -120,13 +120,6 @@ function App() {
       .then(res => {
         setMovies(search(res));
         localStorage.setItem('movies', JSON.stringify(movies));
-        if (width>1279) {
-          setAddedMovies(movies.slice(0, 12));
-        } else if (width>767) {
-          setAddedMovies(movies.slice(0, 8));
-        } else if (width>1) {
-          setAddedMovies(movies.slice(0, 5));
-        }
       })
       .catch((err) => {
         console.log(err);
@@ -136,6 +129,13 @@ function App() {
         localStorage.setItem('addedMovies', parseInt(addedMovies.length));
         console.log(addedMovies);
       })
+      if (width>1279) {
+        setAddedMovies(movies.slice(0, 12));
+      } else if (width>767) {
+        setAddedMovies(movies.slice(0, 8));
+      } else if (width>1) {
+        setAddedMovies(movies.slice(0, 5));
+      }
   }
 
   function addMoreMovies() {
@@ -183,6 +183,41 @@ function App() {
          });
      }
 
+    function searchSavedMovies() {
+      mainApi.getMovies()
+        .then(res => {
+          setSavedMovies(search(res.myMovies));
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    };
+
+    function deleteMovie(id) {
+      mainApi
+        .deleteMovie(id)
+        .then(() => {
+          setSavedMovies((movies) =>
+            movies.filter((c) => (c._id !== id ? c : null))
+          )})
+        .catch(err => {
+          console.log(err);
+        });
+    }
+
+  function saveCard(movie) {
+      mainApi
+      .postMovie({ country: movie.country, director: movie.director, duration: movie.duration,
+        year: movie.year, description: movie.description, image: `https://api.nomoreparties.co/${ movie.image.url }`, trailerLink: movie.trailerLink,
+        nameRU: movie.nameRU, nameEN: movie.nameEN, thumbnail: `https://api.nomoreparties.co/${movie.image.formats.thumbnail.url}`, id: movie.id })
+      .then(res => {
+        setSavedMovies([...savedMovies, res.movie]);
+      })
+      .catch(err => {
+        console.log(err);
+    })
+  }
+
   return (
     <AppContext.Provider
       value={{
@@ -202,19 +237,50 @@ function App() {
         queryText,
         setQueryText,
         addMoreMovies,
+        setSavedMovies,
         savedMovies,
         setISLoading,
       }}
     >
+    <CurrentUserContext.Provider
+      value={currentUser}
+      >
       <div className="page">
         {isLoading ? (
           <Preloader />
         ) : (
           <Routes>
           <Route path="/" element={<Main />} />
-          <Route path="/movies" element={<Movies />} />
-          <Route path="/saved-movies" element={<SavedMovies />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route 
+            path="/movies" 
+            element={
+              <ProtectedRouteElement 
+                element={Movies}
+                movies={addedMovies}
+                onSearch={downloadMovies}
+                onDelete={deleteMovie}
+                onSave={saveCard}
+                />
+            } 
+            />
+          <Route 
+            path="/saved-movies" 
+            element={
+              <ProtectedRouteElement 
+                element={SavedMovies}
+                movies={savedMovies}
+                onSearch={searchSavedMovies}
+                onDelete={deleteMovie}
+                />
+            } />
+          <Route 
+            path="/profile" 
+            element={
+              <ProtectedRouteElement 
+                element={Profile}
+                
+                />
+            } />
           <Route
             path="/signin"
             element={
@@ -246,6 +312,7 @@ function App() {
         )}
         
       </div>
+    </CurrentUserContext.Provider>
     </AppContext.Provider>
   );
 }

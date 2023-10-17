@@ -5,38 +5,16 @@ import * as mainApi from "../../utils/MainApi";
 function MoviesCard(props) {
   const appContext = React.useContext(AppContext);
   const [saved, setSaved] = React.useState(false);
-  const movieImage = `https://api.nomoreparties.co/${props.movie.image.url}`;
+  const savedMovieImage = props.movie.image;
   const handleCardSave = () => {
-    mainApi
-      .postMovie({ country: props.movie.country, director: props.movie.director, duration: props.movie.duration,
-        year: props.movie.year, description: props.movie.description, image: movieImage, trailerLink: props.movie.trailerLink,
-        nameRU: props.movie.nameRU, nameEN: props.movie.nameEN, thumbnail: props.movie.thumbnail, id: props.movie.id })
-      .then(res => {
-        setSaved(true);
-        console.log(res);
-      })
-      .catch(err => {
-        console.log(err);
-    })
-    
+    props.onSave(props.movie);
+    setSaved(true);
   };
 
   const handleCardDelete = () => {
-    mainApi
-      .getMovies()
-      .then(res => {
-        const thisMovie = res.myMovies.find(item => item.id === props.movie.id)
-        .deleteMovie(thisMovie._id)
-        .then(res => {
-          setSaved(false);
-        })
-        .catch(err => {
-          console.log(err);
-        })
-      })
-      .catch(err => {
-        console.log(err);
-    })
+    console.log(props.movie)
+    props.onDelete(props.movie._id);
+    setSaved(false);
   };
 
   function minutesToHours (totalMinutes) {
@@ -47,6 +25,12 @@ function MoviesCard(props) {
   }
 
   const duration = minutesToHours(props.movie.duration)
+
+  React.useEffect(() => {
+    if(appContext.savedMovies.find(item => item.id === props.movie.id)) {
+      setSaved(true);
+    }
+  }, [appContext.moviesRoute, appContext.savedMovies])
 
   return (
     <article className="movies-card">
@@ -61,18 +45,20 @@ function MoviesCard(props) {
           </button>
         ) : (
           <button
-            onClick={handleCardDelete}
             type="button"
             className="movies-card__button movies-card__button_saved"
           />
         )
       ) : (
         <button
+          onClick={handleCardDelete}
           type="button"
           className="movies-card__button movies-card__button_delete"
         ></button>
       )}
-      <img className="movies-card__image" src={movieImage} alt={props.movie.nameRU} />
+      <a className="movies-card__trailer-link" rel="noreferrer" href={props.movie.trailerLink} target="_blank">
+      <img className="movies-card__image" src={appContext.moviesRoute ? (`https://api.nomoreparties.co/${ props.movie.image.url }`) : (savedMovieImage)} alt={props.movie.nameRU} />
+      </a>
       <div className="movies-card__info">
         <h2 className="movies-card__title">{props.movie.nameRU}</h2>
         <div className="movies-card__container-duration">

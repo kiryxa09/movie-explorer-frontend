@@ -1,23 +1,18 @@
-import { AppContext } from "../../context/AppContext";
 import MoviesCard from "../MoviesCard/MoviesCard";
 import React from "react";
 
-function MoviesCardList() {
-  const appContext = React.useContext(AppContext);
+function MoviesCardList(props) {
 
   return (
     <div className="movies-card-list">
-      {appContext.moviesRoute ? (appContext.addedMovies.map((movie) => (
+      {props.movies.map((movie) => (
           <MoviesCard
             movie={movie}
             key={movie.id}
+            onDelete={props.onDelete}
+            onSave={props.onSave}
           />
-        ))) :
-        (appContext.savedMoviesRoute && appContext.savedMovies.map((movie) => (
-          <MoviesCard
-            movie={movie}
-            key={movie.id}
-          />)))}
+          ))}
     </div>
   );
 }

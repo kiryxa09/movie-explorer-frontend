@@ -57,7 +57,7 @@ export const signOut = () => {
 
 export const patchProfile = ({ name, email }) => {
   return fetch(`${BASE_URL}/users/me`, {
-    method: "POST",
+    method: "PATCH",
     credentials: 'include',
     headers: {
       "Content-Type": "application/json",
@@ -94,14 +94,13 @@ export const postMovie = ({country, director, duration,
     .then((res) => checkResponse(res))
 };
 
-export const deleteMovie = ({movieId}) => {
-  return fetch(`${this._baseUrl}/movies/${movieId}`, {
+export const deleteMovie = (movieId) => {
+  return fetch(`${BASE_URL}/movies/${movieId}`, {
     method: "DELETE",
     credentials: 'include',
     headers: {
       "Content-Type": "application/json",
     },
-  }).then((res) => {
-    return this._checkResponse(res);
-  });
+  })
+  .then((res) => checkResponse(res))
 };

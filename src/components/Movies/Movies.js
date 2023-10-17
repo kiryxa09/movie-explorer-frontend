@@ -5,7 +5,7 @@ import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import { AppContext } from "../../context/AppContext";
 import React from "react";
 
-function Movies() {
+function Movies(props) {
   const appContext = React.useContext(AppContext);
   const noMovies = () => { 
     if (appContext.addedMovies.length === appContext.movies.length) {
@@ -17,8 +17,8 @@ function Movies() {
     <>
       <Header />
       <main className="movies">
-        <SearchForm />
-        <MoviesCardList />
+        <SearchForm onSearch={props.onSearch} />
+        <MoviesCardList movies={props.movies} onDelete={props.onDelete} onSave={props.onSave} />
         {!noMovies() && <button className="movies__button" type="button" onClick={appContext.addMoreMovies}>
           Ещё
         </button>}
