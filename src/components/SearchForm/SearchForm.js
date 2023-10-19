@@ -6,12 +6,31 @@ function SearchForm(props) {
   const [error, setError] = React.useState(false);
 
   const setMovies = (e) => {
+    e.preventDefault();
     if (appContext.queryText) {
-      e.preventDefault();
       props.onSearch();
     } else {
       setError(true);
     }
+  }
+
+  const handleChangeSavedText = (e) => {
+    appContext.setQuerySavedText(e.target.value);
+  }
+
+  const handleChangeText = (e) => {
+    appContext.setQueryText(e.target.value);
+    localStorage.setItem('query', e.target.value);
+    setError(false)
+  }
+
+  const handleChangeCheckbox = (e) => {
+    appContext.setChecked(e.target.checked);
+    localStorage.setItem('checkbox' , JSON.stringify(e.target.checked));
+  }
+
+  const handleChangeSavedCheckbox = (e) => {
+    appContext.setSavedChecked(e.target.checked);
   }
 
   const setSavedMovies = (e) => {
@@ -19,20 +38,9 @@ function SearchForm(props) {
     props.onSearch();
   }
 
-  function handleChangeText(e) {
-    appContext.setQueryText(e.target.value);
-    setError(false);
-    localStorage.setItem('query', e.target.value);
-  }
-
-  function handleChangebox(e) {
-    appContext.setChecked(e.target.checked);
-    localStorage.setItem('checkbox' , JSON.stringify(e.target.checked));
-  }
-
   return (
     <div className="search">
-      <form className="search__form">
+      <form className="search__form" onSubmit={appContext.moviesRoute ? (setMovies) : (setSavedMovies)}>
         <div className="search__finder">
           <input
             className="search__input"
@@ -41,10 +49,10 @@ function SearchForm(props) {
             name="search"
             type="text"
             placeholder="Фильм"
-            value={appContext.queryText}
-            onChange={handleChangeText}
+            value={appContext.moviesRoute ? (appContext.queryText) : (appContext.querySavedText)}
+            onChange={appContext.moviesRoute ? (handleChangeText) : (handleChangeSavedText)}
           />
-          <button className="search__button" type="button" onClick={appContext.moviesRoute ? (setMovies) : (setSavedMovies)}>
+          <button className="search__button" type="submit">
             Найти
           </button>
         </div>
@@ -55,8 +63,8 @@ function SearchForm(props) {
               type="checkbox"
               id="tumb"
               name="tumb"
-              checked={appContext.checked}
-              onChange={handleChangebox}
+              checked={appContext.moviesRoute ? (appContext.checked) : (appContext.savedChecked)}
+              onChange={appContext.moviesRoute ? (handleChangeCheckbox) : (handleChangeSavedCheckbox)}
             />
             <span className="search__tumb-visible" />
             Короткометражки

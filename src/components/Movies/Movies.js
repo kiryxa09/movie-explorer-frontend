@@ -13,13 +13,16 @@ function Movies(props) {
     }
     return false;
   }
+  React.useEffect(() => {
+    props.movies && localStorage.setItem('addedMovies', (props.movies.length));
+  },[props.movies])
   return (
     <>
       <Header />
       <main className="movies">
         <SearchForm onSearch={props.onSearch} />
         <MoviesCardList movies={props.movies} onDelete={props.onDelete} onSave={props.onSave} />
-        {!noMovies() && <button className="movies__button" type="button" onClick={appContext.addMoreMovies}>
+        {!noMovies() && <button className="movies__button" type="button" onClick={props.onMore}>
           Ещё
         </button>}
       </main>

@@ -1,6 +1,5 @@
 import React from "react";
 import { AppContext } from "../../context/AppContext";
-import * as mainApi from "../../utils/MainApi";
 
 function MoviesCard(props) {
   const appContext = React.useContext(AppContext);
@@ -12,8 +11,7 @@ function MoviesCard(props) {
   };
 
   const handleCardDelete = () => {
-    console.log(props.movie)
-    props.onDelete(props.movie._id);
+    props.onDelete(props.movie.id);
     setSaved(false);
   };
 
@@ -45,6 +43,7 @@ function MoviesCard(props) {
           </button>
         ) : (
           <button
+            onClick={handleCardDelete}
             type="button"
             className="movies-card__button movies-card__button_saved"
           />

@@ -24,23 +24,24 @@ function App() {
   const [movies, setMovies] = React.useState(JSON.parse(localStorage.getItem('movies')) || []);
   const [addedMovies, setAddedMovies] = React.useState([]);
   const [checked, setChecked] = React.useState(false);
+  const [savedChecked, setSavedChecked] = React.useState(false);
   const [queryText, setQueryText] = React.useState("");
+  const [querySavedText, setQuerySavedText] = React.useState("");
   const [addedMoviesCounter, setAddedMoviesCounter] = React.useState(JSON.parse(localStorage.getItem('addedMovies')) || 0);
   const [searchParam] = React.useState(["nameRU", "nameEN"]);
   const [savedMovies, setSavedMovies] = React.useState([]);
   const [isLoading, setISLoading] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState({});
+  const [initialised, setInitialised] = React.useState(false);
 
   const location = useLocation();
 
-  const navigate = useNavigate();
   
   const handleTokenCheck = () => {
     mainApi.checkToken().then((res) => {
       if (res) {
         setCurrentUser(res);
         setRegistered(true);
-        navigate("/movies", { replace: true });
         mainApi
           .getMovies()
           .then(res => {
@@ -49,6 +50,9 @@ function App() {
         })
         .catch(err => {
           console.log(err);
+        })
+        .finally(() => {
+          setInitialised(true);
         })
     }
     console.log(savedMovies);
@@ -60,9 +64,6 @@ function App() {
   }, []);
 
   React.useEffect(() => {
-    if (addedMoviesCounter) {
-      setAddedMovies(movies.slice(0, addedMoviesCounter));
-    }
     setChecked(JSON.parse(localStorage.getItem('checkbox')));
     setQueryText(localStorage.getItem('query'));
     console.log(localStorage);
@@ -119,38 +120,55 @@ function App() {
     moviesApi.getMovies()
       .then(res => {
         setMovies(search(res));
-        localStorage.setItem('movies', JSON.stringify(movies));
       })
       .catch((err) => {
         console.log(err);
       })
       .finally(() => {
         setISLoading(false);
-        localStorage.setItem('addedMovies', parseInt(addedMovies.length));
-        console.log(addedMovies);
+        setAddedMovies(movies);
+        console.log(localStorage)
       })
-      if (width>1279) {
-        setAddedMovies(movies.slice(0, 12));
-      } else if (width>767) {
-        setAddedMovies(movies.slice(0, 8));
-      } else if (width>1) {
-        setAddedMovies(movies.slice(0, 5));
-      }
   }
 
+  React.useEffect(() => {
+    localStorage.setItem('movies', JSON.stringify(movies));
+    if (width>1279) {
+      setAddedMoviesCounter(12);
+      setAddedMovies(movies.slice(0, addedMoviesCounter));
+      localStorage.setItem('addedMovies', (12));
+    } else if (width>767) {
+      setAddedMoviesCounter(8);
+      setAddedMovies(movies.slice(0, addedMoviesCounter));
+      localStorage.setItem('addedMovies', (8));
+    } else if (width>1) {
+      setAddedMoviesCounter(5);
+      setAddedMovies(movies.slice(0, addedMoviesCounter));
+      localStorage.setItem('addedMovies', (5));
+    }
+  }, [movies]);
+
+  React.useEffect(() => {
+    console.log(addedMoviesCounter);
+    if(addedMoviesCounter) {
+      setAddedMovies(movies.slice(0, addedMoviesCounter));
+    }
+  },[addedMoviesCounter])
+
   function addMoreMovies() {
+    console.log(1);
     let firstMovie = addedMovies.length;
     let secondMovie = firstMovie + 1;
     let thirdMovie = firstMovie + 2;
     if (width > 1279 && movies[thirdMovie]) {
       setAddedMovies([ ...addedMovies, movies[firstMovie],  movies[secondMovie], movies[thirdMovie] ]);
-      localStorage.setItem('addedMovies', parseInt(addedMovies.length));
+      localStorage.setItem('addedMovies', parseInt(addedMovies.length + 3));
     } else if (movies[secondMovie]) {
       setAddedMovies([ ...addedMovies, movies[firstMovie], movies[secondMovie] ]);
-      localStorage.setItem('addedMovies', parseInt(addedMovies.length));
+      localStorage.setItem('addedMovies', parseInt(addedMovies.length + 2));
     } else if (movies[firstMovie]) {
       setAddedMovies([ ...addedMovies, movies[firstMovie] ]);
-      localStorage.setItem('addedMovies', parseInt(addedMovies.length));
+      localStorage.setItem('addedMovies', parseInt(addedMovies.length + 1));
     } else {
       console.log("bom bom", movies[thirdMovie]);
     }
@@ -194,11 +212,12 @@ function App() {
     };
 
     function deleteMovie(id) {
+      const movieToDelete = savedMovies.find(item => item.id === id)
       mainApi
-        .deleteMovie(id)
+        .deleteMovie(movieToDelete._id)
         .then(() => {
           setSavedMovies((movies) =>
-            movies.filter((c) => (c._id !== id ? c : null))
+            movies.filter((c) => (c._id !== movieToDelete._id ? c : null))
           )})
         .catch(err => {
           console.log(err);
@@ -218,6 +237,10 @@ function App() {
     })
   }
 
+  React.useEffect(() => {
+
+  })
+
   return (
     <AppContext.Provider
       value={{
@@ -230,16 +253,23 @@ function App() {
         moviesRoute,
         profileRoute,
         movies,
+        setMovies,
         downloadMovies,
+        setAddedMovies,
         addedMovies,
         checked,
         setChecked,
+        savedChecked,
+        setSavedChecked,
         queryText,
         setQueryText,
-        addMoreMovies,
+        querySavedText,
+        setQuerySavedText,
         setSavedMovies,
         savedMovies,
         setISLoading,
+        setAddedMoviesCounter,
+        initialised
       }}
     >
     <CurrentUserContext.Provider
@@ -260,6 +290,7 @@ function App() {
                 onSearch={downloadMovies}
                 onDelete={deleteMovie}
                 onSave={saveCard}
+                onMore={addMoreMovies}
                 />
             } 
             />

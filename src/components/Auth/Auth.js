@@ -1,13 +1,16 @@
 import { Link, useNavigate } from "react-router-dom";
 import React from "react";
 import Logo from "../Logo/Logo";
-import { useFormWithValidation } from "../../hooks/useForm";
+import { useForm, useValidation } from "../../hooks/useForm";
 import { AppContext } from "../../context/AppContext";
 import * as mainApi from "../../utils/MainApi";
 import { CurrentUserContext } from "../../context/CurrentUserContext";
 
 function Auth(props) {
-  const validation = useFormWithValidation();
+  const input = useForm();
+  const emailValidation = useValidation(input.values.email, {isEmpty: "Введите текст", email: input.values.email});
+  const nameValidation = useValidation(input.values.name, {isEmpty: "Введите текст", minLength: 2, maxLength: 30, name: input.values.name});
+  const passwordValidation = useValidation(input.values.password, {isEmpty: "Введите текст", minLength: 2, maxLength: 30})
   const navigate = useNavigate();
   const appContext = React.useContext(AppContext);
   const currentUser = React.useContext(CurrentUserContext);
@@ -15,7 +18,7 @@ function Auth(props) {
   const handleLogin = (e) => {
     e.preventDefault();
 
-    if (!validation.values.email || !validation.values.password) {
+    if (!input.values.email || !input.values.password) {
       return;
     }
 
@@ -23,22 +26,22 @@ function Auth(props) {
 
     mainApi
       .authorize({
-        password: validation.values.password,
-        email: validation.values.email,
+        password: input.values.password,
+        email: input.values.email,
       })
       .then((data) => {
         if (data) {
           console.log(data);
-          validation.resetForm("")
+          input.setValues("")
           appContext.setRegistered(true);
-          currentUser.name = validation.values.name;
-          currentUser.email = validation.values.email;
-          navigate("/", { replace: true });
+          currentUser.name = input.values.name;
+          currentUser.email = input.values.email;
         }
       })
-      .catch((err) => console.log(err))
+      .catch((err) => console.log(err.message))
       .finally(() => {
         appContext.setISLoading(false);
+        navigate("/movies", { replace: true });
       })      
   }
 
@@ -47,20 +50,31 @@ function Auth(props) {
     appContext.setISLoading(true);
     mainApi
       .register({
-        password: validation.values.password,
-        email: validation.values.email,
-        name: validation.values.name
+        password: input.values.password,
+        email: input.values.email,
+        name: input.values.name
       })
       .then((res) => {
-        console.log(res);
         if (res) {
-          validation.setValues("");
-          navigate("/signin", { replace: true });        }
-      })
-      .catch((err) => console.log(err))
-      .finally(() => {
-        appContext.setISLoading(false);
-      })    
+          mainApi
+            .authorize({
+              password: input.values.password,
+              email: input.values.email,
+            })
+            .then(() => {
+              input.setValues("")
+              appContext.setRegistered(true);
+              currentUser.name = input.values.name;
+              currentUser.email = input.values.email;
+            })
+            .catch((err) => console.log(err.message)) 
+            }
+        })
+        .catch((err) => console.log(err.message))
+        .finally(() => {
+          appContext.setISLoading(false);
+          navigate("/movies", { replace: true });
+        })    
   }
 
   return (
@@ -79,13 +93,20 @@ function Auth(props) {
                 name="name"
                 type="text"
                 placeholder="Имя"
-                minLength={2}
-                maxLength={30}
-                value={validation.values.name ?? ""}
-                onChange={validation.handleChange}
-                onError={validation.errors}
-                pattern="^[-а-яА-ЯёЁa-zA-Z\s]+$"
+                value={input.values.name ?? ""}
+                onChange={input.handleChange}
               />
+              <span className={!nameValidation.isValid ? ("auth__error auth__error_active") : ("auth__error")}>
+                {nameValidation.isEmpty ? 
+                nameValidation.isEmpty : 
+                nameValidation.minLengthError ? 
+                nameValidation.minLengthError : 
+                nameValidation.nameError ?
+                nameValidation.nameError :
+                nameValidation.maxLengthError ?
+                nameValidation.maxLengthError : 
+                'Неопознанная ошибка'}
+              </span>
             </>
           )}
           <p className="auth__label">E-mail</p>
@@ -96,11 +117,16 @@ function Auth(props) {
             name="email"
             type="email"
             placeholder="Email"
-            value={validation.values.email ?? ""}
-            onChange={validation.handleChange}
-            onError={validation.errors}
-            pattern="[^@\s]+@[^@\s]+\.[^@\s]+"
+            value={input.values.email ?? ""}
+            onChange={input.handleChange}
           />
+          <span className={!emailValidation.isValid ? ("auth__error auth__error_active") : ("auth__error")}>
+            {emailValidation.isEmpty ?
+            emailValidation.isEmpty :
+            emailValidation.emailError ?
+            emailValidation.emailError :
+            'Неопознанная ошибка'}
+            </span>
           <p className="auth__label">Пароль</p>
           <input
             className="auth__input auth__input_type_password"
@@ -109,17 +135,25 @@ function Auth(props) {
             name="password"
             type="password"
             placeholder="Пароль"
-            minLength={2}
-            maxLength={30}
-            value={validation.values.password ?? ""}
-            onChange={validation.handleChange}
-            onError={validation.errors}
+            value={input.values.password ?? ""}
+            onChange={input.handleChange}
           />
+          <span className={!passwordValidation.isValid ? ("auth__error auth__error_active") : ("auth__error")}>
+            {passwordValidation.isEmpty ?
+            passwordValidation.isEmpty :
+            passwordValidation.minLengthError ? 
+            passwordValidation.minLengthError : 
+            passwordValidation.maxLengthError ?
+            passwordValidation.maxLengthError :
+            'Неопознанная ошибка'}
+            </span>
         </form>
-        <span className={validation.isValid ? ("auth__error") : ("auth__error auth__error_active")}>{validation.errors.name || validation.errors.email || validation.errors.password}</span>
       </div>
       <div className="auth__button-container">
-        <button type="submit" disabled={validation.isValid ? (false) : (true)} className={validation.isValid ? ("auth__button") : ("auth__button auth__button_error")}  onClick={appContext.signinRoute ? (handleLogin) : (handleRegister)}>
+        <button 
+          type="submit" 
+          disabled={!emailValidation.isValid || (props.signup && !nameValidation.isValid) || !passwordValidation.isValid  } 
+          className={emailValidation.isValid || (props.signup && nameValidation.isValid) || passwordValidation.isValid ? ("auth__button") : ("auth__button auth__button_error")}  onClick={appContext.signinRoute ? (handleLogin) : (handleRegister)}>
           {props.buttonText}
         </button>
         <p className="auth__signup">

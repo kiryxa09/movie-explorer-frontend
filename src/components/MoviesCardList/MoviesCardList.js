@@ -5,7 +5,7 @@ function MoviesCardList(props) {
 
   return (
     <div className="movies-card-list">
-      {props.movies.map((movie) => (
+      {props.movies && props.movies.map((movie) => (
           <MoviesCard
             movie={movie}
             key={movie.id}
