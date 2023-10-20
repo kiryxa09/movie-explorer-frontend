@@ -25,13 +25,13 @@ function Movies(props) {
       <Header />
       <main className="movies">
         <SearchForm onSearch={props.onSearch} onCheckboxFilter={props.onCheckboxFilter} />
+        {appContext.nothingFound && <span className="movies__not-found">Ничего не найдено</span> }
         {appContext.moviesAreLoading ? 
         (<Preloader />) : 
         (<MoviesCardList movies={props.movies} onDelete={props.onDelete} onSave={props.onSave} />)}
         {!noMovies() && <button className="movies__button" type="button" onClick={props.onMore}>
           Ещё
         </button>}
-        {appContext.nothingFound && <span className="movies__not-found">Ничего не найдено</span> }
       </main>
       <Footer />
     </>

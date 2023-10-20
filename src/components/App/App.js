@@ -67,7 +67,7 @@ function App() {
 
   React.useEffect(() => {
     handleTokenCheck();
-  }, []);
+  }, [registeredState]);
 
   React.useEffect(() => {
     setChecked(JSON.parse(localStorage.getItem('checkbox')));
@@ -125,12 +125,7 @@ function App() {
     setMoviesAreLoading(true);
     moviesApi.getMovies()
       .then(res => {
-        if(res) {
-          setNothingFound(false);
-          setMovies(search(res));
-        } else {
-          setNothingFound(true);
-        }
+        setMovies(search(res));
       })
       .catch((err) => {
         console.log(err);
@@ -138,7 +133,6 @@ function App() {
       .finally(() => {
         setMoviesAreLoading(false);
         setAddedMovies(movies);
-        console.log(localStorage)
       })
   }
 
@@ -215,30 +209,40 @@ function App() {
   }
 
   function search(items) {
-    return items.filter((item) => {
+    const matches = items.filter((item) => {
     if(checked) {
       if(item.duration < 41) {
         return searchParam.some((newItem) => {
           return (
             item[newItem]
-                .toString()
-                .toLowerCase()
-                .indexOf(queryText.toLowerCase()) > -1
-                     );
-                 });
+              .toString()
+              .toLowerCase()
+              .indexOf(queryText.toLowerCase()) > -1
+          );
+        });
       }
     } else if (!checked) {
         return searchParam.some((newItem) => {
           return (
             item[newItem]
-                .toString()
-                .toLowerCase()
-                .indexOf(queryText.toLowerCase()) > -1
-                     );
-                 });
-                }
-         });
-     }
+              .toString()
+              .toLowerCase()
+              .indexOf(queryText.toLowerCase()) > -1
+          );
+                 
+        });
+      }
+    });
+    console.log(matches);
+    if(matches.length === 0){
+      setNothingFound(true);
+      console.log(1);
+    } else {
+      setNothingFound(false);
+      console.log(2);
+    }
+    return matches;
+  }
 
      function searchSaved(items) {
       return items.filter((item) => {
