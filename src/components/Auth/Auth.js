@@ -68,13 +68,13 @@ function Auth(props) {
               currentUser.email = input.values.email;
             })
             .catch((err) => console.log(err.message)) 
-            }
-        })
-        .catch((err) => console.log(err.message))
-        .finally(() => {
-          appContext.setISLoading(false);
-          navigate("/movies", { replace: true });
-        })    
+            .finally(() => {
+              appContext.setISLoading(false);
+              navigate("/movies", { replace: true });
+            })
+        } 
+      })
+      .catch((err) => console.log(err.message))
   }
 
   return (
