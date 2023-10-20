@@ -35,6 +35,7 @@ function App() {
   const [moviesAreLoading, setMoviesAreLoading] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState({});
   const [initialised, setInitialised] = React.useState(false);
+  const [nothingFound, setNothingFound] = React.useState(false);
 
   const location = useLocation();
 
@@ -124,7 +125,12 @@ function App() {
     setMoviesAreLoading(true);
     moviesApi.getMovies()
       .then(res => {
-        setMovies(search(res));
+        if(res) {
+          setNothingFound(false);
+          setMovies(search(res));
+        } else {
+          setNothingFound(true);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -329,6 +335,7 @@ function App() {
         setAddedMoviesCounter,
         initialised,
         moviesAreLoading,
+        nothingFound
       }}
     >
     <CurrentUserContext.Provider

@@ -31,6 +31,7 @@ function Movies(props) {
         {!noMovies() && <button className="movies__button" type="button" onClick={props.onMore}>
           Ещё
         </button>}
+        {appContext.nothingFound && <span className="movies__not-found">Ничего не найдено</span> }
       </main>
       <Footer />
     </>
