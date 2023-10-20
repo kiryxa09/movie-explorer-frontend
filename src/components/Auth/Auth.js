@@ -69,12 +69,14 @@ function Auth(props) {
             })
             .catch((err) => console.log(err.message)) 
             .finally(() => {
-              appContext.setISLoading(false);
               navigate("/movies", { replace: true });
             })
         } 
       })
       .catch((err) => console.log(err.message))
+      .finally(() => {
+        appContext.setISLoading(false);
+      })
   }
 
   return (
