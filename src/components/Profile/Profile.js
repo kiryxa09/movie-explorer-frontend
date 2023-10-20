@@ -13,6 +13,7 @@ function Profile() {
   const nameValidation = useValidation(input.values.name, {isEmpty: "Введите текст", minLength: 2, maxLength: 30, name: ''});
   const [editing, setEditing] = React.useState(false);
   const [error, setError] = React.useState("");
+  const [success, setSuccess] = React.useState("");
 
   const currentUser = React.useContext(CurrentUserContext);
 
@@ -22,6 +23,7 @@ function Profile() {
   }, [currentUser, appContext.profileRoute]);
 
   const editProfile = () => {
+    setSuccess("");
     setEditing(true);
   };
 
@@ -51,13 +53,13 @@ function Profile() {
       })
   };
 
-  const clickEditButton = (e) => {
-    e.preventDefault();
-    appContext.setISLoading(true);
+  const clickEditButton = (evt) => {
+    evt.preventDefault();
     mainApi.patchProfile(input.values)
     .then(res => {
       currentUser.name = res.user.name;
       currentUser.email = res.user.email;
+      setSuccess(true);
       setEditing(false);
     })
     .catch((err) => {
@@ -66,10 +68,7 @@ function Profile() {
       } else {
         setError("При обновлении профиля произошла ошибка.")
       }
-  })
-    .finally(() => {
-      appContext.setISLoading(false)
-      console.log(error)
+      setSuccess(false);
     })
   };
 
@@ -84,9 +83,9 @@ function Profile() {
   return (
     <div className="profile">
       <Header />
-      <div className="profile__content">
-        <h1 className="profile__header">{`Привет, ${currentUser.name}!`}</h1>
-        <form className="profile__form" name="profile-form" noValidate>
+      <form className="profile__form" name="profile-form" onSubmit={clickEditButton} noValidate>
+        <div className="profile__content">
+          <h1 className="profile__header">{`Привет, ${currentUser.name}!`}</h1>
           <label htmlFor="profile-name" className="profile__label">
             Имя
             <input
@@ -115,34 +114,36 @@ function Profile() {
                 nameValidation.maxLengthError ?
                 nameValidation.maxLengthError : 
                 'Неопознанная ошибка'}
-              </span>
-          <label htmlFor="profile-email" className="profile__label">
-            E-mail
-            <input
-              required
-              id="profile-email"
-              type="email"
-              name="email"
-              className="profile__input profile__input_type_email"
-              placeholder="email"
-              disabled={editing ? false : true}
-              value={input.values.email ?? ""}
-              onChange={input.handleChange}
-            />
-          </label>
-          <span className={
-            !emailValidation.isValid 
-              ? "profile__edit-error profile__edit-error_active"
-              : "profile__edit-error"
-              }>
-            {emailValidation.isEmpty ?
-            emailValidation.isEmpty :
-            emailValidation.emailError ?
-            emailValidation.emailError :
-            'Неопознанная ошибка'}
             </span>
-        </form>
-      </div>
+            <label htmlFor="profile-email" className="profile__label">
+              E-mail
+              <input
+                required
+                id="profile-email"
+                type="email"
+                name="email"
+                className="profile__input profile__input_type_email"
+                placeholder="email"
+                disabled={editing ? false : true}
+                value={input.values.email ?? ""}
+                onChange={input.handleChange}
+              />
+            </label>
+            <span className={
+              !emailValidation.isValid 
+                ? "profile__edit-error profile__edit-error_active"
+                : "profile__edit-error"
+                }>
+              {emailValidation.isEmpty ?
+              emailValidation.isEmpty :
+              emailValidation.emailError ?
+              emailValidation.emailError :
+              'Неопознанная ошибка'}
+              </span>
+              {success && (
+                <span className="profile__success">Данные обновлены</span>
+            )}
+        </div>
       {editing ? (
         <div className="profile__edit-container">
           <span
@@ -160,9 +161,8 @@ function Profile() {
                 ? "profile__save-button profile__save-button_error"
                 : "profile__save-button"
             }
-            type="button"
+            type="submit"
             disabled={!emailValidation.isValid || !nameValidation.isValid || error}
-            onClick={clickEditButton}
           >
             Сохранить
           </button>
@@ -183,7 +183,8 @@ function Profile() {
           </Link>
         </div>
       )}
-    </div>
+    </form>
+  </div>
   );
 }
 

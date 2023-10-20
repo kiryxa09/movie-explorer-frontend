@@ -30,7 +30,9 @@ function App() {
   const [addedMoviesCounter, setAddedMoviesCounter] = React.useState(JSON.parse(localStorage.getItem('addedMovies')) || 0);
   const [searchParam] = React.useState(["nameRU", "nameEN"]);
   const [savedMovies, setSavedMovies] = React.useState([]);
+  const [savedMoviesFiltered, setSavedMoviesFiltered] = React.useState([]);
   const [isLoading, setISLoading] = React.useState(false);
+  const [moviesAreLoading, setMoviesAreLoading] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState({});
   const [initialised, setInitialised] = React.useState(false);
 
@@ -38,7 +40,8 @@ function App() {
 
   
   const handleTokenCheck = () => {
-    mainApi.checkToken().then((res) => {
+    mainApi.checkToken()
+      .then((res) => {
       if (res) {
         setCurrentUser(res);
         setRegistered(true);
@@ -47,17 +50,19 @@ function App() {
           .then(res => {
             console.log(res);
             setSavedMovies(res.myMovies)
-        })
-        .catch(err => {
-          console.log(err);
-        })
-        .finally(() => {
-          setInitialised(true);
-        })
-    }
-    console.log(savedMovies);
-    });
-  };
+            setSavedMoviesFiltered(res.myMovies)
+          })
+          .catch(err => {
+            console.log(err);
+          })
+        }})
+      .catch(err => {
+        console.log(err);
+      })
+      .finally(() => {
+        setInitialised(true);
+      })
+  }
 
   React.useEffect(() => {
     handleTokenCheck();
@@ -116,7 +121,7 @@ function App() {
   }, [location.pathname]);
 
   function downloadMovies() {
-    setISLoading(true);
+    setMoviesAreLoading(true);
     moviesApi.getMovies()
       .then(res => {
         setMovies(search(res));
@@ -125,7 +130,7 @@ function App() {
         console.log(err);
       })
       .finally(() => {
-        setISLoading(false);
+        setMoviesAreLoading(false);
         setAddedMovies(movies);
         console.log(localStorage)
       })
@@ -154,6 +159,34 @@ function App() {
       setAddedMovies(movies.slice(0, addedMoviesCounter));
     }
   },[addedMoviesCounter])
+
+  React.useEffect(() => {
+    if(movies) {
+      setAddedMovies(search(movies));
+      console.log('check', addedMovies);
+      if(!checked){
+        if (width>1279) {
+          setAddedMoviesCounter(12);
+          setAddedMovies(movies.slice(0, addedMoviesCounter));
+          localStorage.setItem('addedMovies', (12));
+        } else if (width>767) {
+          setAddedMoviesCounter(8);
+          setAddedMovies(movies.slice(0, addedMoviesCounter));
+          localStorage.setItem('addedMovies', (8));
+        } else if (width>1) {
+          setAddedMoviesCounter(5);
+          setAddedMovies(movies.slice(0, addedMoviesCounter));
+          localStorage.setItem('addedMovies', (5));
+        }
+      }
+    }
+  },[checked, initialised])
+
+  React.useEffect(() => {
+    if(savedMovies) {
+      setSavedMoviesFiltered(searchSaved(savedMovies))
+    }
+  }, [savedChecked])
 
   function addMoreMovies() {
     console.log(1);
@@ -201,14 +234,34 @@ function App() {
          });
      }
 
+     function searchSaved(items) {
+      return items.filter((item) => {
+      if(savedChecked) {
+        if(item.duration < 41) {
+          return searchParam.some((newItem) => {
+            return (
+              item[newItem]
+                  .toString()
+                  .toLowerCase()
+                  .indexOf(querySavedText.toLowerCase()) > -1
+                       );
+                   });
+        }
+      } else if (!savedChecked) {
+          return searchParam.some((newItem) => {
+            return (
+              item[newItem]
+                  .toString()
+                  .toLowerCase()
+                  .indexOf(querySavedText.toLowerCase()) > -1
+                       );
+                   });
+                  }
+           });
+       }
+
     function searchSavedMovies() {
-      mainApi.getMovies()
-        .then(res => {
-          setSavedMovies(search(res.myMovies));
-        })
-        .catch(err => {
-          console.log(err);
-        });
+      setSavedMoviesFiltered(searchSaved(savedMovies));
     };
 
     function deleteMovie(id) {
@@ -237,9 +290,14 @@ function App() {
     })
   }
 
-  React.useEffect(() => {
+  
 
-  })
+  function setShortMovies() {
+    if(movies) {
+      setAddedMovies(search(movies));
+    }
+  }
+
 
   return (
     <AppContext.Provider
@@ -269,7 +327,8 @@ function App() {
         savedMovies,
         setISLoading,
         setAddedMoviesCounter,
-        initialised
+        initialised,
+        moviesAreLoading,
       }}
     >
     <CurrentUserContext.Provider
@@ -291,6 +350,7 @@ function App() {
                 onDelete={deleteMovie}
                 onSave={saveCard}
                 onMore={addMoreMovies}
+                onCheckboxFilter={setShortMovies}
                 />
             } 
             />
@@ -299,7 +359,7 @@ function App() {
             element={
               <ProtectedRouteElement 
                 element={SavedMovies}
-                movies={savedMovies}
+                movies={savedMoviesFiltered}
                 onSearch={searchSavedMovies}
                 onDelete={deleteMovie}
                 />

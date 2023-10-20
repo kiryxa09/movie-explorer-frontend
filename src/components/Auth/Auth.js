@@ -34,8 +34,8 @@ function Auth(props) {
           console.log(data);
           input.setValues("")
           appContext.setRegistered(true);
-          currentUser.name = input.values.name;
-          currentUser.email = input.values.email;
+          currentUser.name = data.name;
+          currentUser.email = data.email;
         }
       })
       .catch((err) => console.log(err.message))
@@ -80,7 +80,9 @@ function Auth(props) {
   return (
     <main className="auth">
       <div className="auth__content">
-        <Logo />
+        <Link to="/">
+          <Logo />
+        </Link>
         <h1 className="auth__title">{props.title}</h1>
         <form className="auth__form" name="auth-form" noValidate>
           {props.signup && (

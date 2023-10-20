@@ -76,7 +76,6 @@ export function useValidation(value, validations) {
       } else {
         setIsValid(true);
       }
-      console.log(emailError, minLengthError, maxLengthError, isEmpty, nameError, isValid)
     },[emailError, minLengthError, maxLengthError, isEmpty, nameError, isValid])
 
   return {

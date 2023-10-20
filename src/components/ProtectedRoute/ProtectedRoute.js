@@ -10,7 +10,7 @@ const ProtectedRouteElement = ({ element: Component, ...props }) => {
   return appContext.registeredState ? (
     <Component {...props} />
   ) : (
-    <Navigate to="/signin" replace />
+    <Navigate to="/" replace />
   );
 };
 

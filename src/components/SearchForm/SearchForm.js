@@ -40,7 +40,7 @@ function SearchForm(props) {
 
   return (
     <div className="search">
-      <form className="search__form" onSubmit={appContext.moviesRoute ? (setMovies) : (setSavedMovies)}>
+      <form className="search__form" onSubmit={appContext.moviesRoute ? (setMovies) : (setSavedMovies)} noValidate>
         <div className="search__finder">
           <input
             className="search__input"
