@@ -29,28 +29,22 @@ function Profile() {
 
   const exitProfile = (e) => {
     e.preventDefault();
-    appContext.setISLoading(true);
     mainApi
       .signOut()
       .then((res) => {
-        if (res) {
           appContext.setRegistered(false);
           localStorage.removeItem("checkbox");
           localStorage.removeItem('query');
           localStorage.removeItem('movies');
-          localStorage.removeItem('addedMovies');
           appContext.setMovies([]);
           appContext.setSavedMovies([]);
           appContext.setAddedMovies([]);
-          appContext.setAddedMoviesCounter(0);
           appContext.setQueryText("");
           appContext.setChecked(false);
-        }
+          appContext.setISLoading(true);
+          appContext.setISLoading(false);
       })
       .catch((err) => setError("При выходе из профиля произошла ошибка."))
-      .finally(() => {
-       appContext.setISLoading(false)
-      })
   };
 
   const clickEditButton = (evt) => {
@@ -79,6 +73,7 @@ function Profile() {
       setError("")
     }
   }, [input.values.email, input.values.name, editing, currentUser.name, currentUser.email])
+
 
   return (
     <div className="profile">
