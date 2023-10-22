@@ -8,8 +8,8 @@ import Preloader from "../Preloader/Preloader";
 
 function Movies(props) {
   const appContext = React.useContext(AppContext);
-  const noMovies = () => { 
-    if (appContext.addedMovies.length === appContext.movies.length) {
+  const noMoreMovies = () => { 
+    if (appContext.addedMoviesFiltered.length === appContext.addedMovies.length) {
       return true;    
     }
     if(appContext.checked === true) {
@@ -17,19 +17,28 @@ function Movies(props) {
     }
     return false;
   }
-  React.useEffect(() => {
-    props.movies && localStorage.setItem('addedMovies', (props.movies.length));
-  },[props.movies])
+
+  const noMovies = () => {
+    if(appContext.movies.length > 0) {
+      if(appContext.nothingFound) {
+        return true;
+      }
+      return false;
+    } else {
+      return false;
+    }
+  }
+
   return (
     <>
       <Header />
       <main className="movies">
-        <SearchForm onSearch={props.onSearch} onCheckboxFilter={props.onCheckboxFilter} />
-        {appContext.nothingFound && <span className="movies__not-found">Ничего не найдено</span> }
+        <SearchForm onSearch={props.onSearch} />
+        {noMovies() && <span className="movies__not-found">Ничего не найдено</span> }
         {appContext.moviesAreLoading ? 
         (<Preloader />) : 
         (<MoviesCardList movies={props.movies} onDelete={props.onDelete} onSave={props.onSave} />)}
-        {!noMovies() && <button className="movies__button" type="button" onClick={props.onMore}>
+        {!noMoreMovies() && <button className="movies__button" type="button" onClick={props.onMore}>
           Ещё
         </button>}
       </main>

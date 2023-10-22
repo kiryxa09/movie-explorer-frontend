@@ -38,7 +38,7 @@ function Auth(props) {
           currentUser.email = data.email;
         }
       })
-      .catch((err) => console.log(err.message))
+      .catch((err) => console.log(err))
       .finally(() => {
         appContext.setISLoading(false);
         navigate("/movies", { replace: true });
@@ -157,7 +157,7 @@ function Auth(props) {
         <button 
           type="submit" 
           disabled={!emailValidation.isValid || (props.signup && !nameValidation.isValid) || !passwordValidation.isValid  } 
-          className={emailValidation.isValid || (props.signup && nameValidation.isValid) || passwordValidation.isValid ? ("auth__button") : ("auth__button auth__button_error")}  onClick={appContext.signinRoute ? (handleLogin) : (handleRegister)}>
+          className={!emailValidation.isValid || (props.signup && !nameValidation.isValid) || !passwordValidation.isValid ? ("auth__button auth__button_error") : ("auth__button")}  onClick={appContext.signinRoute ? (handleLogin) : (handleRegister)}>
           {props.buttonText}
         </button>
         <p className="auth__signup">
