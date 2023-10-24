@@ -119,6 +119,14 @@
   background-image: url(../../images/smalltumb_active.svg);
 }
 
+.search__error {
+  color: #FF4062;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
 @media screen and (max-width: 1023px) {
   .search__form {
     margin-bottom: 110px;

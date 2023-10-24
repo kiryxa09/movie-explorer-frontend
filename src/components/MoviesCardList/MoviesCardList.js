@@ -1,14 +1,18 @@
 import MoviesCard from "../MoviesCard/MoviesCard";
+import React from "react";
 
-function MoviesCardList() {
+function MoviesCardList(props) {
+
   return (
     <div className="movies-card-list">
-      <MoviesCard />
-      <MoviesCard />
-      <MoviesCard />
-      <MoviesCard />
-      <MoviesCard />
-      <MoviesCard />
+      {props.movies && props.movies.map((movie) => (
+          <MoviesCard
+            movie={movie}
+            key={movie.id}
+            onDelete={props.onDelete}
+            onSave={props.onSave}
+          />
+          ))}
     </div>
   );
 }

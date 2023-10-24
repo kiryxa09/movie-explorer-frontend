@@ -2,7 +2,7 @@
   margin-top: -35px;
   background-color: #f3c1f8;
   position: relative;
-  height: 555px;
+  min-height: 555px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -25,20 +25,18 @@
   font-style: normal;
   font-weight: 400;
   line-height: 58px;
-  letter-spacing: -2px;
-  max-height: 100%;
-  overflow: hidden;
+  letter-spacing: -2px; 
 }
 
 @media screen and (max-width: 1023px) {
   .promo {
-    height: 815px;
+    min-height: 815px;
   }
 }
 
 @media screen and (max-width: 767px) {
   .promo {
-    height: 600px;
+    min-height: 600px;
   }
 
   .promo__header {

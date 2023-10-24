@@ -2,14 +2,17 @@ import Footer from "../Footer/Footer";
 import Header from "../Header/Header";
 import SearchForm from "../SearchForm/SearchForm";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
+import React from "react";
 
-function SavedMovies() {
+function SavedMovies(props) {
+
+
   return (
     <>
       <Header />
       <main className="saved-movies">
-        <SearchForm />
-        <MoviesCardList />
+        <SearchForm onSearch={props.onSearch} />
+        <MoviesCardList movies={props.movies} onDelete={props.onDelete} />
       </main>
       <Footer />
     </>
